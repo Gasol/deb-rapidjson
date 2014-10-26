@@ -1,0 +1,66 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+#DH_VERBOSE = 1
+
+# see EXAMPLES in dpkg-buildflags(1) and read /usr/share/dpkg/*
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/default.mk
+
+# see FEATURE AREAS in dpkg-buildflags(1)
+#export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+# see ENVIRONMENT in dpkg-buildflags(1)
+# package maintainers to append CFLAGS
+#export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+# package maintainers to append LDFLAGS
+#export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+
+# main packaging script based on dh7 syntax
+%:
+	dh $@ 
+
+# debmake generated override targets
+# This is example for Cmake (See http://bugs.debian.org/641051 )
+#override_dh_auto_configure:
+#	dh_auto_configure -- \
+#	-DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH)
+
+RUN_TESTS=n
+ifneq (nocheck,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
+  ifeq "$(DEB_HOST_ARCH)" "i386"
+    RUN_TESTS=y
+  endif
+  ifeq "$(DEB_HOST_ARCH)" "amd64"
+    RUN_TESTS=y
+  endif
+endif
+
+override_dh_auto_clean:
+	if [ -d build/gmake ]; then $(MAKE) -C build/gmake -f test.make config=release$(DEB_HOST_ARCH_BITS) verbose=1 clean; fi
+	rm -rf build/gmake
+	rm -rf doc/html doc/doxygen_sqlite3.db
+	dh_auto_clean
+
+override_dh_auto_build:
+	dh_auto_build
+	doxygen build/Doxyfile
+
+override_dh_installdocs:
+	dh_installdocs
+	rm -f debian/rapidjson-doc/usr/share/doc/rapidjson-doc/diagram/.gitignore
+
+override_dh_auto_test:
+ifeq "$(RUN_TESTS)" "y"
+	cd build && premake4 gmake
+ifneq "$(shell grep sse4_2 /proc/cpuinfo)" ""
+	# needs SSE 4.2! Even doesn't compile without -msse4.2
+	$(MAKE) -C build/gmake -f test.make config=release$(DEB_HOST_ARCH_BITS) verbose=1 perftest
+	cd bin && ./perftest_release_x$(DEB_HOST_ARCH_BITS)_gmake
+endif
+	cd build/gmake && for i in *; do perl -pi -e 's/-msse4.2//' $$i; done
+	$(MAKE) -C build/gmake -f test.make config=release$(DEB_HOST_ARCH_BITS) verbose=1 unittest
+	cd bin && ./unittest_release_x$(DEB_HOST_ARCH_BITS)_gmake
+endif
+

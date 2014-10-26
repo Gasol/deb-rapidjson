@@ -1,0 +1,20 @@
+--- rapidjson-0.12~git20140926.orig/build/premake4.lua
++++ rapidjson-0.12~git20140926/build/premake4.lua
+@@ -87,7 +87,7 @@ solution "test"
+         kind "ConsoleApp"
+         
+         if _ACTION == "gmake" then
+-            buildoptions "-Werror -Weffc++ -Wswitch-default"
++            buildoptions "-Weffc++ -Wswitch-default"
+         end
+ 
+         files { 
+@@ -154,7 +154,7 @@ solution "example"
+         defines { "_CRT_SECURE_NO_WARNINGS" }
+ 
+     configuration "gmake"
+-        buildoptions "-Werror -Wall -Wextra -Weffc++ -Wswitch-default"
++        buildoptions "-Wall -Wextra -Weffc++ -Wswitch-default"
+ 
+     local examplepaths = os.matchdirs("../example/*")
+     for _, examplepath in ipairs(examplepaths) do

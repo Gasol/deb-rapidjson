@@ -1,0 +1,5 @@
+rapidjson (0.12~git20140926-1) unstable; urgency=low
+
+  * Initial release (Closes: #763453)
+
+ -- Rene Engelhard <rene@debian.org>  Sun, 26 Oct 2014 18:49:47 +0100
