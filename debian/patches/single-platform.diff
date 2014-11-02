@@ -1,0 +1,20 @@
+--- a/build/premake4.lua
++++ b/build/premake4.lua
+@@ -46,7 +46,7 @@ end
+ 
+ solution "test"
+     configurations { "debug", "release" }
+-    platforms { "x32", "x64" }
++    platforms { "native" }
+ 
+     location ("./" .. (_ACTION or ""))
+     language "C++"
+@@ -127,7 +127,7 @@ solution "test"
+ 
+ solution "example"
+     configurations { "debug", "release" }
+-    platforms { "x32", "x64" }
++    platforms { "native" }
+     location ("./" .. (_ACTION or ""))
+     language "C++"
+     flags { "ExtraWarnings" }

@@ -1,2 +1,3 @@
-external-libs.diff
 no-werror.diff
+use-system-gtest.diff
+single-platform.diff

@@ -27,18 +27,8 @@ include /usr/share/dpkg/default.mk
 #	dh_auto_configure -- \
 #	-DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH)
 
-RUN_TESTS=n
-ifneq (nocheck,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
-  ifeq "$(DEB_HOST_ARCH)" "i386"
-    RUN_TESTS=y
-  endif
-  ifeq "$(DEB_HOST_ARCH)" "amd64"
-    RUN_TESTS=y
-  endif
-endif
-
 override_dh_auto_clean:
-	if [ -d build/gmake ]; then $(MAKE) -C build/gmake -f test.make config=release$(DEB_HOST_ARCH_BITS) verbose=1 clean; fi
+	if [ -d build/gmake ]; then $(MAKE) -C build/gmake -f test.make config=release verbose=1 clean; fi
 	rm -rf build/gmake
 	rm -rf doc/html doc/doxygen_sqlite3.db
 	dh_auto_clean
@@ -47,20 +37,10 @@ override_dh_auto_build:
 	dh_auto_build
 	doxygen build/Doxyfile
 
-override_dh_installdocs:
-	dh_installdocs
-	rm -f debian/rapidjson-doc/usr/share/doc/rapidjson-doc/diagram/.gitignore
-
 override_dh_auto_test:
-ifeq "$(RUN_TESTS)" "y"
 	cd build && premake4 gmake
-ifneq "$(shell grep sse4_2 /proc/cpuinfo)" ""
-	# needs SSE 4.2! Even doesn't compile without -msse4.2
-	$(MAKE) -C build/gmake -f test.make config=release$(DEB_HOST_ARCH_BITS) verbose=1 perftest
-	cd bin && ./perftest_release_x$(DEB_HOST_ARCH_BITS)_gmake
-endif
-	cd build/gmake && for i in *; do perl -pi -e 's/-msse4.2//' $$i; done
-	$(MAKE) -C build/gmake -f test.make config=release$(DEB_HOST_ARCH_BITS) verbose=1 unittest
-	cd bin && ./unittest_release_x$(DEB_HOST_ARCH_BITS)_gmake
-endif
+	$(MAKE) -C build/gmake -f test.make config=release verbose=1 perftest
+	cd bin && ./perftest_release_native_gmake
+	$(MAKE) -C build/gmake -f test.make config=release verbose=1 unittest
+	cd bin && ./unittest_release_native_gmake
 

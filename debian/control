@@ -1,10 +1,10 @@
 Source: rapidjson
 Priority: optional
 Maintainer: Rene Engelhard <rene@debian.org>
-Build-Depends: debhelper (>= 9), premake4, doxygen, libyajl-dev, libjsoncpp-dev
-Standards-Version: 3.9.5
+Build-Depends: debhelper (>= 9), premake4, doxygen, libgtest-dev
+Standards-Version: 3.9.6
 Section: libs
-Homepage: https://code.google.com/p/rapidjson/
+Homepage: https://miloyip.github.io/rapidjson
 #Vcs-Git: git://anonscm.debian.org/collab-maint/rapidjson.git
 #Vcs-Browser: http://anonscm.debian.org/?p=collab-maint/rapidjson.git;a=summary
 
@@ -13,7 +13,7 @@ Section: libdevel
 Architecture: all
 Depends: ${misc:Depends}
 Description: fast JSON parser/generator for C++ with SAX/DOM style API
- Rapidjson is an attempt to create the fastest JSON parser and generator.
+ RapidJSON is an attempt to create the fastest JSON parser and generator.
  .
   - Small but complete. Supports both SAX and DOM style API. SAX parser only a
     few hundred lines of code.
@@ -24,7 +24,7 @@ Description: fast JSON parser/generator for C++ with SAX/DOM style API
   - Compact. Each JSON value is 16 or 20 bytes for 32 or 64-bit machines
     respectively (excluding text string storage). With the custom memory
     allocator, parser allocates memory compactly during parsing.
-  - Full  RFC4627 compliance. Supports UTF-8, UTF-16 and UTF-32.
+  - Full RFC7159 compliance. Supports UTF-8, UTF-16 and UTF-32.
   - Support both in-situ parsing (directly decode strings into the source JSON
     text) and non-destructive parsing (decode strings into new buffers).
   - Parse number to int/unsigned/int64_t/uint64_t/double depending on input
@@ -36,6 +36,7 @@ Package: rapidjson-doc
 Section: doc
 Architecture: all
 Depends: ${misc:Depends}, libjs-jquery
-Description: Documentation for rapidjson
- This package contains the documentation for rapidjson
+Description: fast JSON parser/generator for C++ (API documentation)
+ This package contains the documentation for RapidJSON, a fast JSON
+ parser/generator for C++ with both SAX/DOM style APIs.
 
