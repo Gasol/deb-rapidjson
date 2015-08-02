@@ -1,3 +1,10 @@
+rapidjson (0.12~git20141031-2) unstable; urgency=medium
+
+  * build-depend on g++-5 to work around segfault in the tests
+    (closes: #792070)
+
+ -- Rene Engelhard <rene@debian.org>  Sun, 02 Aug 2015 11:45:01 +0000
+
 rapidjson (0.12~git20141031-1) unstable; urgency=low
 
   * new upstream snapshot
