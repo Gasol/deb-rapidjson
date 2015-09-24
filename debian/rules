@@ -40,16 +40,17 @@ override_dh_auto_configure:
 
 override_dh_auto_build:
 	# ran by dh_auto_install (make install) anyway...
-	$(MAKE)
-	#$(MAKE) doc
+	cd build && $(MAKE)
+	#cd build && $(MAKE) doc
 
 ifneq (nocheck,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 override_dh_auto_test:
-	sed -i -e "s/ctest/ctest --verbose/" Makefile
-	$(MAKE) test
+	cd build && \
+		sed -i -e "s/ctest/ctest --verbose/" Makefile && \
+		$(MAKE) test
 endif
 
 override_dh_auto_install:
-	dh_auto_install
+	cd build && $(MAKE) install DESTDIR=$(shell echo $(CURDIR) | sed -e "s/\/build$$//")/debian/tmp
 	cd debian/tmp/usr/share/doc && \
 		mv RapidJSON rapidjson-doc
