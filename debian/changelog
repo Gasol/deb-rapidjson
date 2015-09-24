@@ -1,3 +1,11 @@
+rapidjson (1.0.2-1) experimental; urgency=medium
+
+  * New upstream release (closes: #799899)
+
+  * remove jquery.js link in rapidjson-doc. 
+
+ -- Rene Engelhard <rene@debian.org>  Thu, 24 Sep 2015 17:48:39 +0200
+
 rapidjson (0.12~git20141031-3) unstable; urgency=medium
 
   * oops, g++ has an epoch..

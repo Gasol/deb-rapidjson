@@ -1,7 +1,7 @@
 Source: rapidjson
 Priority: optional
 Maintainer: Rene Engelhard <rene@debian.org>
-Build-Depends: debhelper (>= 9), premake4, doxygen, libgtest-dev, g++ (>= 4:5)
+Build-Depends: debhelper (>= 9), cmake, doxygen, libgtest-dev, g++ (>= 4:5)
 Standards-Version: 3.9.6
 Section: libs
 Homepage: https://miloyip.github.io/rapidjson
@@ -35,7 +35,7 @@ Description: fast JSON parser/generator for C++ with SAX/DOM style API
 Package: rapidjson-doc
 Section: doc
 Architecture: all
-Depends: ${misc:Depends}, libjs-jquery
+Depends: ${misc:Depends}
 Description: fast JSON parser/generator for C++ (API documentation)
  This package contains the documentation for RapidJSON, a fast JSON
  parser/generator for C++ with both SAX/DOM style APIs.

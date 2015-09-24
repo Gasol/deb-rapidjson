@@ -28,19 +28,28 @@ include /usr/share/dpkg/default.mk
 #	-DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH)
 
 override_dh_auto_clean:
-	if [ -d build/gmake ]; then $(MAKE) -C build/gmake -f test.make config=release verbose=1 clean; fi
-	rm -rf build/gmake
 	rm -rf doc/html doc/doxygen_sqlite3.db
 	dh_auto_clean
+	rm -rf build
+	# I hate cmake
+	rm -rf CMakeFiles Testing/Temporary Makefile test/unittest/CTestTestfile.cmake
+
+override_dh_auto_configure:
+	mkdir -p build
+	cd build && cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON
 
 override_dh_auto_build:
-	dh_auto_build
-	doxygen build/Doxyfile
+	# ran by dh_auto_install (make install) anyway...
+	$(MAKE)
+	#$(MAKE) doc
 
+ifneq (nocheck,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 override_dh_auto_test:
-	cd build && premake4 gmake
-	$(MAKE) -C build/gmake -f test.make config=release verbose=1 perftest
-	cd bin && ./perftest_release_native_gmake
-	$(MAKE) -C build/gmake -f test.make config=release verbose=1 unittest
-	cd bin && ./unittest_release_native_gmake
+	sed -i -e "s/ctest/ctest --verbose/" Makefile
+	$(MAKE) test
+endif
 
+override_dh_auto_install:
+	dh_auto_install
+	cd debian/tmp/usr/share/doc && \
+		mv RapidJSON rapidjson-doc
