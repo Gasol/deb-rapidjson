@@ -1,3 +1,9 @@
+rapidjson (1.0.2-2bintray1~jessie) jessie; urgency=medium
+
+  * Backports to jessie
+
+ -- Gasol Wu <gasol.wu@gmail.com>  Wed, 21 Dec 2016 16:16:30 +0800
+
 rapidjson (1.0.2-2) experimental; urgency=medium
 
   * add missing python to Build-Depends 
